@@ -15,7 +15,7 @@ A fully client-side React application that allows users to:
 
 ## 🚀 Live Demo
 
-> `[https://your-username.github.io/your-repo-name/](https://bala-oops.github.io/my-avatar-app/)`
+> (https://bala-oops.github.io/my-avatar-app/)
 
 ---
 
@@ -157,10 +157,6 @@ git subtree push --prefix dist origin gh-pages
 ---
 
 ## 🖼️ Screenshots
-
-Captured directly from the deployed site: `https://bala-oops.github.io/my-avatar-app/`.
-
-> If screenshots do not appear, run the `capture-screenshots` script (instructions below) to generate them locally and commit them to the repo.
 
 ### Home / 3D Preview Canvas 
 ![Home - Uploader](/home_uploader.png)
