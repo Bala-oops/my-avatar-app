@@ -1,23 +1,212 @@
-# Avatar Mapper (React, client-only)
+# 🧑‍🎨 3D Avatar Generator (Photo → 3D Head Mapping)
 
-Browser-only React app that maps uploaded photos onto a 3D head mesh, allows adjustment, preview, and PNG export at selectable resolutions. Uses mock JSON for presets and example images. Deployable to GitHub Pages.
+A fully client-side React application that allows users to:
 
-## Features
-- Upload via file dialog or drag-and-drop.
-- Map image to 3D head and adjust scale/rotation/translation/blend/lighting.
-- Real-time 3D preview with orbit/pan/zoom.
-- Export PNG via an off-screen re-render at chosen resolution (512/1024/2048).
-- Client-only: photos never leave your browser.
-- Deployable to GitHub Pages.
+* Upload a face photo
+* Map it onto a **3D head model** (GLB)
+* Auto-fit the texture using basic landmark detection
+* Manually adjust scale / rotation / translation
+* Preview the avatar in real-time (Three.js + R3F)
+* Export the final screenshot
+* Runs **entirely in the browser** – no backend required
+* Deployable on **GitHub Pages**
 
-## Local setup
+---
 
-### Prerequisites
-- Node 18+ recommended
-- Git
+## 🚀 Live Demo
 
-### Install & run
-```powershell
-# from project root
+> (Add link after deployment)
+> `https://your-username.github.io/your-repo-name/`
+
+---
+
+## 📦 Tech Stack Used
+
+### **Frontend**
+
+* **React (Vite)**
+* **JavaScript (ES2020+)**
+* **Three.js** for 3D rendering
+* **@react-three/fiber** for React bindings
+* **@react-three/drei** for helpers
+* **Zustand** for global state
+* **CSS Modules** for styling
+* **Mock JSON data** (no backend)
+
+### **Face Auto-Fit**
+
+* **TensorFlow.js**
+* **@tensorflow-models/face-landmarks-detection**
+* Lightweight auto-fit that adjusts:
+
+  * translateX
+  * translateY
+  * scale
+  * rotation
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+ ├── components/
+ │    ├── ControlsPanel/
+ │    │     ├── TransformControls.jsx
+ │    │     ├── AutoFit.jsx
+ │    │     ├── Uploader.jsx
+ │    │     ├── *.module.css
+ │    ├── PreviewCanvas/
+ │    │     ├── MappedHead.jsx
+ │    │     ├── Scene.jsx
+ │    │     ├── PreviewCanvas.module.css
+ │    ├── ExportPanel/
+ │    └── TopBar/
+ ├── store/
+ │    └── useStore.js
+ ├── utils/
+ │    └── imageUtils.js
+ ├── mock/
+ │    └── mockData.json
+public/
+ ├── assets/
+ │     ├── meshes/head_neutral.glb
+ │     └── samples/
+ │
+index.html
+vite.config.js
+```
+
+---
+
+## 🛠️ Setup Steps (Development Environment)
+
+### **Prerequisites**
+
+* Node.js >= 18
+* Git installed
+
+---
+
+### 1) **Clone the Repository**
+
+```sh
+git clone https://github.com/<your-username>/<your-repo>
+cd <your-repo>
+```
+
+---
+
+### 2) **Install Dependencies**
+
+```sh
 npm install
+```
+
+---
+
+### 3) **Run Development Server**
+
+```sh
 npm run dev
+```
+
+The app should now be available at:
+
+```
+http://localhost:5173/
+```
+
+---
+
+### 4) **Build for Production**
+
+```sh
+npm run build
+```
+
+---
+
+### 5) **Preview Production Build**
+
+```sh
+npm run preview
+```
+
+---
+
+## 📤 Deploying to GitHub Pages
+
+Inside `vite.config.js`, ensure:
+
+```js
+export default defineConfig({
+  base: '/your-repo-name/',
+  plugins: [react()],
+});
+```
+
+Then run:
+
+```sh
+npm run build
+git add dist -f
+git commit -m "Deploy"
+git subtree push --prefix dist origin gh-pages
+```
+
+---
+
+## 🖼️ Screenshots
+
+Captured directly from the deployed site: `https://bala-oops.github.io/my-avatar-app/`.
+
+> If screenshots do not appear, run the `capture-screenshots` script (instructions below) to generate them locally and commit them to the repo.
+
+### Home / Uploader
+![Home - Uploader](screenshots/home_uploader.png)
+
+### 3D Preview Canvas (Mapped head)
+![Preview - 3D Canvas](screenshots/preview_canvas.png)
+
+### Auto-fit + Transform Controls
+![Auto-fit and Transform Controls](screenshots/auto_fit_controls.png)
+
+> Tip: If you'd like different capture sizes or extra views (e.g., export panel), adjust the `capture-screenshots.js` script below and re-run it.
+
+
+## 🧩 Assumptions
+
+* The app is **frontend-only**; no backend or cloud storage is used.
+* All assets (GLB, example photos, mock JSON) are packaged locally.
+* The GLB head mesh uses standard UVs and supports texture projection.
+* Auto-fit uses **approximate** face alignment — not full 3D reconstruction.
+
+---
+
+## ⭐ Bonus Features Implemented
+
+* **Automatic face detection** → auto-alignment
+* **Fallback mode** (Sphere) if head GLB fails to load
+* **Robust GLB loading** with file-size checking
+* **Cross-browser compatible texture mapping**
+* **Undo / redo history** for mapping adjustments
+* **GitHub Pages–safe path resolution** using:
+
+  ```js
+  import.meta.env.BASE_URL
+  ```
+* **Custom screenshot export** (canvas to PNG)
+
+---
+
+## 📄 License
+
+MIT License.
+
+---
+
+## 👨‍💻 Author
+
+**Your Name**
+GitHub: [https://github.com/your-username](https://github.com/Bala-oops)
