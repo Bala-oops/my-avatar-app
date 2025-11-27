@@ -15,7 +15,7 @@ A fully client-side React application that allows users to:
 
 ## 🚀 Live Demo
 
-> (https://bala-oops.github.io/my-avatar-app/)
+> [https://bala-oops.github.io/my-avatar-app/](https://bala-oops.github.io/my-avatar-app)
 
 ---
 
@@ -197,4 +197,4 @@ MIT License.
 ## 👨‍💻 Author
 
 **Your Name**
-GitHub: [https://github.com/your-username](https://github.com/Bala-oops)
+GitHub: [https://github.com/your-Bala-oops](https://github.com/Bala-oops)
