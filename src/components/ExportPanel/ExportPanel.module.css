@@ -1,0 +1,22 @@
+﻿.export {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.export h4 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+}

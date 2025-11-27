@@ -1,0 +1,66 @@
+:root {
+  --gap: 12px;
+  --panel-bg: #ffffff;
+  --accent: #2563eb;
+}
+
+html, body, #root, .appRoot {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #0f172a;
+  background: #f6f8fb;
+}
+
+.topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: white;
+  box-shadow: 0 6px 18px rgba(12,24,40,0.06);
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 360px 1fr 320px;
+  gap: var(--gap);
+  padding: 20px;
+  height: calc(100% - 64px);
+  box-sizing: border-box;
+}
+
+.leftPanel, .rightPanel {
+  background: var(--panel-bg);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(12, 24, 40, 0.06);
+  overflow-y: auto;
+}
+
+.centerPanel {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  padding: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* small responsive */
+@media (max-width: 960px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    height: calc(100% - 64px);
+  }
+  .leftPanel, .rightPanel {
+    order: 3;
+  }
+  .centerPanel {
+    order: 2;
+  }
+}

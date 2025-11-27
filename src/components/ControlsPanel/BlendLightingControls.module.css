@@ -1,0 +1,18 @@
+﻿.blend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.blend h4 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+input[type="range"] {
+  width: 100%;
+}

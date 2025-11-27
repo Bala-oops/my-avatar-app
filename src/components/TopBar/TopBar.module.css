@@ -1,0 +1,26 @@
+﻿.topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: white;
+  box-shadow: 0 6px 18px rgba(12,24,40,0.06);
+}
+.brand {
+  font-weight: 600;
+  font-size: 16px;
+}
+.right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.note {
+  font-size: 12px;
+  color: #64748b;
+}
+.photo {
+  font-size: 13px;
+  color: #0f172a;
+}
