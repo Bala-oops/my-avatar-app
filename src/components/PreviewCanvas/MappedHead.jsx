@@ -1,10 +1,12 @@
-﻿import React, { useEffect, useRef, useState } from "react";
+﻿// src/components/PreviewCanvas/MappedHead.jsx
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 
 /**
  * Robust MappedHead:
+ * - resolves meshPath relative to import.meta.env.BASE_URL (works on GH Pages)
  * - checks meshPath first (fetch)
  * - if valid, mounts GLTFModel (which uses useGLTF)
  * - otherwise uses textured sphere fallback
@@ -12,6 +14,18 @@ import { useGLTF } from "@react-three/drei";
  * mapping expects:
  *  { scale, rotation (radians), translateX, translateY, blend, lighting }
  */
+
+/** small helper: resolve a possibly-relative meshPath to include BASE_URL */
+function resolvePathWithBase(path) {
+  const base = import.meta.env.BASE_URL || "/";
+  if (!path) return `${base}assets/meshes/head_neutral.glb`;
+  // If path already seems absolute (http(s)://) return as-is
+  if (/^https?:\/\//i.test(path)) return path;
+  // If path already begins with base, return as-is
+  if (path.startsWith(base)) return path;
+  // Remove leading slashes from path then join
+  return `${base}${path.replace(/^\/+/, "")}`;
+}
 
 function GLTFModel({ meshPath, groupRef, mapping, textureRef }) {
   // This component is only mounted when GLB check has passed.
@@ -81,32 +95,37 @@ function GLTFModel({ meshPath, groupRef, mapping, textureRef }) {
   return <primitive object={scene} ref={groupRef} dispose={null} />;
 }
 
-export default function MappedHead({ meshPath = "/assets/meshes/head_neutral.glb", photoSrc, mapping = {} }) {
+export default function MappedHead({
+  meshPath = "assets/meshes/head_neutral.glb",
+  photoSrc,
+  mapping = {},
+}) {
+  // resolve meshPath against Vite base so it works on GH Pages
+  const resolvedMeshPath = resolvePathWithBase(meshPath);
+
   const [checked, setChecked] = useState(false);
   const [useFallback, setUseFallback] = useState(false);
   const groupRef = useRef();
   const textureRef = useRef(null);
 
-  // Pre-check the GLB before mounting useGLTF
+  // Pre-check the GLB before mounting useGLTF (use resolved path)
   useEffect(() => {
     let canceled = false;
     (async () => {
       try {
-        const res = await fetch(meshPath, { method: "GET" });
+        const res = await fetch(resolvedMeshPath, { method: "GET" });
         if (!res.ok) {
-          console.warn("GLB fetch failed:", res.status);
+          // mark fallback if not found
           if (!canceled) setUseFallback(true);
         } else {
           const buf = await res.arrayBuffer();
           if (buf.byteLength < 100) {
-            console.warn("GLB file too small/empty:", buf.byteLength);
             if (!canceled) setUseFallback(true);
           } else {
             if (!canceled) setUseFallback(false);
           }
         }
       } catch (err) {
-        console.warn("Error fetching GLB:", err);
         if (!canceled) setUseFallback(true);
       } finally {
         if (!canceled) setChecked(true);
@@ -115,7 +134,7 @@ export default function MappedHead({ meshPath = "/assets/meshes/head_neutral.glb
     return () => {
       canceled = true;
     };
-  }, [meshPath]);
+  }, [resolvedMeshPath]);
 
   // Load the user's photo into a THREE.Texture with proper settings
   useEffect(() => {
@@ -129,16 +148,21 @@ export default function MappedHead({ meshPath = "/assets/meshes/head_neutral.glb
     img.onload = () => {
       const tex = new THREE.Texture(img);
 
-      // IMPORTANT texture settings
-      tex.flipY = false; // glTF UVs expect flipY=false
-      // new API
-      if ('colorSpace' in tex) {
-        tex.colorSpace = THREE.SRGBColorSpace;
+      // Modern colorSpace API with fallback for older three.js
+      if ("colorSpace" in tex) {
+        // new three.js property
+        if (THREE.SRGBColorSpace) {
+          tex.colorSpace = THREE.SRGBColorSpace;
+        } else {
+          tex.encoding = THREE.sRGBEncoding;
+        }
       } else {
         // legacy fallback (keeps older three versions working)
         tex.encoding = THREE.sRGBEncoding;
       }
-      
+
+      // IMPORTANT texture settings
+      tex.flipY = false; // glTF UVs expect flipY=false
       tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
       tex.minFilter = THREE.LinearMipMapLinearFilter;
       tex.magFilter = THREE.LinearFilter;
@@ -155,14 +179,14 @@ export default function MappedHead({ meshPath = "/assets/meshes/head_neutral.glb
       textureRef.current = tex;
     };
 
-    img.onerror = (e) => {
-      console.warn("Failed to load photoSrc:", e);
+    img.onerror = () => {
       textureRef.current = null;
     };
 
     return () => {
-      // if photoSrc was an objectURL, the uploader should revoke it when appropriate
+      // cleanup if needed (uploader should revoke object URLs if used)
     };
+    // include mapping props so texture updates when user tweaks
   }, [photoSrc, mapping.scale, mapping.rotation, mapping.translateX, mapping.translateY]);
 
   // If GLB check hasn't completed, render nothing (allow Suspense fallback to show)
@@ -185,7 +209,7 @@ export default function MappedHead({ meshPath = "/assets/meshes/head_neutral.glb
           } catch {
             mat = new THREE.MeshStandardMaterial({ color: 0xffffff });
           }
-          mat.color.set(0xffffff);
+          if (mat.color) mat.color.set(0xffffff);
           mat.map = tex;
           mat.roughness = mat.roughness ?? 0.6;
           mat.metalness = 0;
@@ -216,5 +240,5 @@ export default function MappedHead({ meshPath = "/assets/meshes/head_neutral.glb
   }
 
   // Safe path: mount GLTF model and let GLTFModel handle material updates
-  return <GLTFModel meshPath={meshPath} groupRef={groupRef} mapping={mapping} textureRef={textureRef} />;
+  return <GLTFModel meshPath={resolvedMeshPath} groupRef={groupRef} mapping={mapping} textureRef={textureRef} />;
 }
