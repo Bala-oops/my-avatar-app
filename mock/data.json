@@ -1,0 +1,21 @@
+{
+  "presets": [
+    {
+      "id": "preset_head_01",
+      "name": "Neutral Head",
+      "meshPath": "/assets/meshes/head_neutral.glb",
+      "defaultMapping": {
+        "scale": 1.0,
+        "rotation": 0,
+        "translate": { "x": 0, "y": 0 },
+        "blend": 0.95,
+        "lighting": { "intensity": 1.0, "direction": [0.5, 0.8, 0.3] }
+      }
+    }
+  ],
+  "examplePhotos": [
+    { "id": "ex1", "name": "Woman smile", "src": "/assets/images/ex1.jpg" },
+    { "id": "ex2", "name": "Man neutral", "src": "/assets/images/ex2.jpg" }
+  ],
+  "ui": { "maxFileSizeMB": 8, "allowedTypes": [".jpg", ".jpeg", ".png"] }
+}
