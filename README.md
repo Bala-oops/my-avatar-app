@@ -15,8 +15,7 @@ A fully client-side React application that allows users to:
 
 ## 🚀 Live Demo
 
-> (Add link after deployment)
-> `https://your-username.github.io/your-repo-name/`
+> `[https://your-username.github.io/your-repo-name/](https://bala-oops.github.io/my-avatar-app/)`
 
 ---
 
@@ -163,16 +162,9 @@ Captured directly from the deployed site: `https://bala-oops.github.io/my-avatar
 
 > If screenshots do not appear, run the `capture-screenshots` script (instructions below) to generate them locally and commit them to the repo.
 
-### Home / Uploader
-![Home - Uploader](screenshots/home_uploader.png)
+### Home / 3D Preview Canvas 
+![Home - Uploader](/home_uploader.png)
 
-### 3D Preview Canvas (Mapped head)
-![Preview - 3D Canvas](screenshots/preview_canvas.png)
-
-### Auto-fit + Transform Controls
-![Auto-fit and Transform Controls](screenshots/auto_fit_controls.png)
-
-> Tip: If you'd like different capture sizes or extra views (e.g., export panel), adjust the `capture-screenshots.js` script below and re-run it.
 
 
 ## 🧩 Assumptions
